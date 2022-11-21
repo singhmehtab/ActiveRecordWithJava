@@ -221,8 +221,8 @@ public class Person implements ActiveRecordInterface {
      *
      * @return the headers
      */
-    public String getHeaders() {
-        return "Id,Name,Age,Gender,Weight,Height";
+    public String[] getHeaders() {
+        return new String[]{"Id","Name","Age","Gender","Weight","Height"};
     }
 
     @Override
@@ -241,10 +241,10 @@ public class Person implements ActiveRecordInterface {
             CSVWriter csvWriter = new CSVWriter((writer));
             List<Person> personList = fetchRecords();
             if (personList.isEmpty()) {
-                csvWriter.writeNext(new String[]{getHeaders()});
+                csvWriter.writeNext(getHeaders());
                 this.id = 1;
             } else this.id = personList.size() + 1;
-            csvWriter.writeNext(new String[]{this.toString()});
+            csvWriter.writeNext(new String[]{this.getId().toString(), this.getName(), this.getAge().toString(), this.getGender(), this.getWeight().toString(), this.getWeight().toString()});
         } catch (IOException | PersistenceException e) {
             e.printStackTrace();
         } finally {
@@ -274,7 +274,12 @@ public class Person implements ActiveRecordInterface {
                     .build();
             List<String[]> allData = csvReader.readAll();
             for (String[] row : allData) {
-                String[] columns = row[0].split(",");
+                String[] columns = new String[row.length];
+                int count = 0;
+                for(String data : row){
+                    columns[count] = data;
+                    count++;
+                }
                 personList.add(new Person(columns[0], columns[1], columns[2], columns[3], columns[4], columns[5]));
             }
         } catch (Exception e) {
@@ -290,9 +295,9 @@ public class Person implements ActiveRecordInterface {
         try {
             FileWriter writer = new FileWriter(file);
             CSVWriter csvWriter = new CSVWriter((writer));
-            csvWriter.writeNext(new String[]{getHeaders()});
+            csvWriter.writeNext(getHeaders());
             for (Person p : personList) {
-                csvWriter.writeNext(new String[]{p.toString()});
+                csvWriter.writeNext(new String[]{p.getId().toString(), p.getName(), p.getAge().toString(), p.getGender(), p.getWeight().toString(), p.getWeight().toString()});
             }
             // closing writer connection
             writer.close();
