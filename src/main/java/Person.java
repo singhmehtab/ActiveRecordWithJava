@@ -58,24 +58,6 @@ public class Person implements ActiveRecordInterface {
     /**
      * Instantiates a new Person.
      *
-     * @param name   the name
-     * @param age    the age
-     * @param gender the gender
-     * @param weight the weight
-     * @param height the height
-     */
-    public Person(String name, String age, String gender, String weight, String height) {
-        super();
-        this.name = name;
-        this.age = Integer.parseInt(age);
-        this.gender = gender;
-        this.weight = Integer.parseInt(weight);
-        this.height = Integer.parseInt(height);
-    }
-
-    /**
-     * Instantiates a new Person.
-     *
      * @param id     the id
      * @param name   the name
      * @param age    the age
@@ -83,7 +65,7 @@ public class Person implements ActiveRecordInterface {
      * @param weight the weight
      * @param height the height
      */
-    public Person(String id, String name, String age, String gender, String weight, String height) {
+    private Person(String id, String name, String age, String gender, String weight, String height) {
         super();
         this.id = Integer.parseInt(id);
         this.name = name;
