@@ -34,7 +34,7 @@ public class MainApplication {
             List<Person> personList = Person.fetchRecords();
             for (Person p : personList) {
                 //Updating object
-                if (p.getName().equals("Mehtab2") && p.getId() == 2) p.setName("UpdatedMehtabName");
+                if (p.getName().equals("Mehtab2")) p.setName("UpdatedMehtabName");
                 System.out.println(p);
             }
         } catch (PersistenceException e) {
