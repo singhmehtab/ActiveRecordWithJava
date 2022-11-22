@@ -1,7 +1,7 @@
 /**
  * The type Persistence exception.
  */
-public class PersistenceException extends Exception {
+public class PersistenceException extends RuntimeException {
 
     /**
      * Instantiates a new Persistence exception.

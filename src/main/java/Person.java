@@ -1,24 +1,9 @@
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import com.opencsv.CSVWriter;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
  * The type Person.
  */
-public class Person implements ActiveRecordInterface {
-
-
-    private final static String CSV_LOCATION = "Person.csv ";
-    private final static String[] columns = new String[]
-            {"id", "name", "age", "gender", "weight", "height"};
+public class Person {
 
     private Integer id;
 
@@ -65,7 +50,7 @@ public class Person implements ActiveRecordInterface {
      * @param weight the weight
      * @param height the height
      */
-    private Person(String id, String name, String age, String gender, String weight, String height) {
+    public Person(String id, String name, String age, String gender, String weight, String height) {
         super();
         this.id = Integer.parseInt(id);
         this.name = name;
@@ -137,7 +122,7 @@ public class Person implements ActiveRecordInterface {
      */
     public void setName(String name) throws PersistenceException {
         this.name = name;
-        updateRecord();
+        
     }
 
     /**
@@ -148,7 +133,7 @@ public class Person implements ActiveRecordInterface {
      */
     public void setAge(Integer age) throws PersistenceException {
         this.age = age;
-        updateRecord();
+        
     }
 
     /**
@@ -159,7 +144,7 @@ public class Person implements ActiveRecordInterface {
      */
     public void setGender(String gender) throws PersistenceException {
         this.gender = gender;
-        updateRecord();
+        
     }
 
     /**
@@ -170,7 +155,7 @@ public class Person implements ActiveRecordInterface {
      */
     public void setWeight(Integer weight) throws PersistenceException {
         this.weight = weight;
-        updateRecord();
+        
     }
 
     /**
@@ -181,31 +166,9 @@ public class Person implements ActiveRecordInterface {
      */
     public void setHeight(Integer height) throws PersistenceException {
         this.height = height;
-        updateRecord();
+        
     }
 
-
-    private void updatePerson(Person person) {
-        this.age = person.getAge();
-        this.name = person.getName();
-        this.gender = person.getGender();
-        this.weight = person.getWeight();
-        this.height = person.getHeight();
-    }
-
-    @Override
-    public String toString() {
-        return getId() + "," + getName() + "," + getAge() + "," + getGender() + "," + getWeight() + "," + getHeight();
-    }
-
-    /**
-     * Gets headers.
-     *
-     * @return the headers
-     */
-    public String[] getHeaders() {
-        return new String[]{"Id","Name","Age","Gender","Weight","Height"};
-    }
 
     @Override
     public boolean equals(Object object) {
@@ -214,100 +177,7 @@ public class Person implements ActiveRecordInterface {
     }
 
     @Override
-    public void save() {
-
-        File file = getFile(CSV_LOCATION);
-        FileWriter writer = null;
-        try {
-            writer = new FileWriter(file, true);
-            CSVWriter csvWriter = new CSVWriter((writer));
-            List<Person> personList = fetchRecords();
-            if (personList.isEmpty()) {
-                csvWriter.writeNext(getHeaders());
-                this.id = 1;
-            } else this.id = personList.size() + 1;
-            csvWriter.writeNext(new String[]{this.getId().toString(), this.getName(), this.getAge().toString(), this.getGender(), this.getWeight().toString(), this.getWeight().toString()});
-        } catch (IOException | PersistenceException e) {
-            e.printStackTrace();
-        } finally {
-            if (writer != null) {
-                try {
-                    writer.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    /**
-     * Fetch records list.
-     *
-     * @return the list
-     * @throws PersistenceException the persistence exception
-     */
-    public static List<Person> fetchRecords() throws PersistenceException {
-        File file = getFile(CSV_LOCATION);
-        List<Person> personList = new ArrayList<>();
-        try {
-            FileReader filereader = new FileReader(file);
-            CSVReader csvReader = new CSVReaderBuilder(filereader)
-                    .withSkipLines(1)
-                    .build();
-            List<String[]> allData = csvReader.readAll();
-            for (String[] row : allData) {
-                String[] columns = new String[row.length];
-                int count = 0;
-                for(String data : row){
-                    columns[count] = data;
-                    count++;
-                }
-                personList.add(new Person(columns[0], columns[1], columns[2], columns[3], columns[4], columns[5]));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new PersistenceException(e.getMessage());
-        }
-        return personList;
-    }
-
-    private void writeUpdatedRecords(List<Person> personList) {
-
-        File file = getFile(CSV_LOCATION);
-        try {
-            FileWriter writer = new FileWriter(file);
-            CSVWriter csvWriter = new CSVWriter((writer));
-            csvWriter.writeNext(getHeaders());
-            for (Person p : personList) {
-                csvWriter.writeNext(new String[]{p.getId().toString(), p.getName(), p.getAge().toString(), p.getGender(), p.getWeight().toString(), p.getWeight().toString()});
-            }
-            // closing writer connection
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void updateRecord() throws PersistenceException {
-        List<Person> personList = fetchRecords();
-        for (Person p : personList) {
-            if (this.equals(p)) {
-                p.updatePerson(this);
-            }
-        }
-        writeUpdatedRecords(personList);
-
-    }
-
-    private static File getFile(String location){
-        File file = new File(location);
-        if(!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return file;
+    public String toString() {
+        return getId() + "," + getName() + "," + getAge() + "," + getGender() + "," + getWeight() + "," + getHeight();
     }
 }
