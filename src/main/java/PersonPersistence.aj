@@ -9,16 +9,16 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-privileged public aspect PersonPersistance {
+privileged public aspect PersonPersistence {
 
     private final static String CSV_LOCATION = "Person.csv";
 
     public static List<Person> Person.fetchRecords() throws PersistenceException {
-        return PersonPersistance.fetchRecords();
+        return PersonPersistence.fetchRecords();
     }
 
     public static Person Person.fetchById(Integer id) {
-        return PersonPersistance.fetchRecords().stream().filter(p -> p.getId().equals(id)).findAny().get();
+        return PersonPersistence.fetchRecords().stream().filter(p -> p.getId().equals(id)).findAny().get();
     }
 
 
